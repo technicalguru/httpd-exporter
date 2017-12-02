@@ -20,6 +20,7 @@ very specific environment only.
 ## Prerequisites
 htppd-exporter is written in Perl. The following prerequisites apply:
 
+* Perl V5.22 or higher (available at `/usr/bin/perl`)
 * Perl module [JSON](http://search.cpan.org/perldoc?JSON)
 * Perl module [JSON::XS](http://search.cpan.org/~mlehmann/JSON-XS-3.04/XS.pm)
 * Perl module [FindBin](https://perldoc.perl.org/FindBin.html)
@@ -41,7 +42,7 @@ A successful test will not produce any output.
 
 # Configuration
 httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. A default configuration file
-is part of the installation (`exporter.conf`) which you should install in directory `/etc/httpd-exporter`. Edit the file then to reflect
+is part of the installation ([exporter.conf](exporter.conf)) which you should install in directory `/etc/httpd-exporter`. Edit the file then to reflect
 your installation. 
 
 See the [Configuration](CONFIGURATION.md) page for more details.

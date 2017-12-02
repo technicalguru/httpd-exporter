@@ -32,12 +32,38 @@ labels={ "instance" : "$HOSTIP", "HOSTNAME" : "$HOSTNAME", "container.name" : "$
 ```
 
 ## General Section
+This is a `key=value`section. The following values can be configured:
 
-TBD
+Key|Value|Required|Default|Description
+---|-----|--------|-------|-----------
+metricsFile|&lt;path&gt;|YES|-|The path to the file where metrics will be stored and served by your HTTPD product. Usually `/var/www/html/metrics`.
 
 ## LogFormats Section
+This is a list section. Each line gives a description of log line that can occur in your installation. These are basically regular Perl expressions
+that are inspired by [grok-exporter]() syntax. Use the `%{TYPE:name}` syntax to match certain default parts in a log line. "name" will define
+a variable that is made available and holds the value of the matched expression. The following types
+are available:
 
-TBD
+Type|Description|Example
+----|-----------|-------
+HOSTNAME|Matches a hostname or IP address|`%{HOSTNAME:virtualHost}`
+HTTPDATE|Matches a standard HTTP date, e.g. `01/Dec/2017:15:20:04 +0100`. The match will set four variables: method, path, protocol and protocolVersion|`%{HTTPDATE:requestTime}`
+INT|Matches an unsigned integer|`%{INT:status}`
+IP|Matches an IP address (v4 or v6)|`%{IP:clientIP}`
+NOTSPACE|Matches any string not containing any whitespace character|`%{NOTSPACE:user}`
+QS|Matches a quoted string, e.g. `"This is a \"quoted String\""`|`%{QS:agent}`
+
+You can use standard Perl regular expressions in the `LogFormats` section. Use the following sytax in order to define a variable "myVar":
+> `(?<myVar>...)`
+Please notice that `>` and `<` are literals that must be present.
 
 ## Location Sections
+This is a `key=value`section. The section title is the (shell-alike) regular expression for matching log files or container directories.
+The following values can be configured:
+
+Key|Value|Required|Default|Description
+---|-----|--------|-------|-----------
+type|`httpd` or `docker` or `kubernetes`|YES|-|Describing the type of the log file(s): Please notice that `docker` and `kubernetes` sections must match directories (usually at `/var/lib/docker/containers`, whereas `httpd` must match single log files.
+labels|JSON string|NO|-|JSON string of additional labels to be produced in metrics for this log file(s)
+
 
