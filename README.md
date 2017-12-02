@@ -81,7 +81,7 @@ The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is ava
 
 # Contribution
 
-TBD
+Please contact @technicalguru if you want to contribute. Any improvement is highly welcome.
 
 # Further Readings
 
