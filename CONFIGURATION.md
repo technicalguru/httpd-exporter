@@ -32,7 +32,7 @@ labels={ "instance" : "$HOSTIP", "HOSTNAME" : "$HOSTNAME", "container.name" : "$
 ```
 
 ## General Section
-This is a `key=value`section. The following values can be configured:
+This is a `key=value` section. The following values can be configured:
 
 Key|Value|Required|Default|Description
 ---|-----|--------|-------|-----------
@@ -40,7 +40,8 @@ metricsFile|&lt;path&gt;|YES|-|The path to the file where metrics will be stored
 
 ## LogFormats Section
 This is a list section. Each line gives a description of log line that can occur in your installation. These are basically regular Perl expressions
-that are inspired by [grok-exporter]() syntax. Use the `%{TYPE:name}` syntax to match certain default parts in a log line. "name" will define
+that are inspired by [grok-exporter](https://github.com/fstab/grok_exporter) syntax. Use the `%{TYPE:name}` 
+syntax to match certain default parts in a log line. "name" will define
 a variable that is made available and holds the value of the matched expression. The following types
 are available:
 
@@ -54,11 +55,13 @@ NOTSPACE|Matches any string not containing any whitespace character|`%{NOTSPACE:
 QS|Matches a quoted string, e.g. `"This is a \"quoted String\""`|`%{QS:agent}`
 
 You can use standard Perl regular expressions in the `LogFormats` section. Use the following sytax in order to define a variable "myVar":
+
 > `(?<myVar>...)`
+
 Please notice that `>` and `<` are literals that must be present.
 
 ## Location Sections
-This is a `key=value`section. The section title is the (shell-alike) regular expression for matching log files or container directories.
+This is a `key=value` section. The section title is the (shell-alike) regular expression for matching log files or container directories.
 The following values can be configured:
 
 Key|Value|Required|Default|Description

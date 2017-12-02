@@ -84,5 +84,7 @@ TBD
 
 # Further Readings
 
-TBD
+* [Configuration](CONFIGURATION.md)
+* [DockerHub Image](https://hub.docker.com/r/technicalguru/httpd-exporter/)
+
 
