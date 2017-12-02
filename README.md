@@ -73,10 +73,11 @@ Prometheus requires the following configuration to scrape the metrics:
 TBD
 
 ## Docker image
-There is a [Docker](https://docker.io/) image available including a [Kubernetes](https://kubernetes.io/) 
-YAML description for installation at:
+There is a [Docker](https://docker.io/) image available:
 
 > [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
+
+The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](httpd-exporter.yaml).
 
 # Contribution
 
