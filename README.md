@@ -20,22 +20,22 @@ very specific environment only.
 ## Prerequisites
 htppd-exporter is written in Perl. The following prerequisites apply:
 
-   * Perl module [JSON](http://search.cpan.org/perldoc?JSON)
-   * Perl module [JSON::XS](http://search.cpan.org/~mlehmann/JSON-XS-3.04/XS.pm)
-   * Perl module [FindBin](https://perldoc.perl.org/FindBin.html)
-   * Perl module [Cwd](https://perldoc.perl.org/Cwd.html)
+* Perl module [JSON](http://search.cpan.org/perldoc?JSON)
+* Perl module [JSON::XS](http://search.cpan.org/~mlehmann/JSON-XS-3.04/XS.pm)
+* Perl module [FindBin](https://perldoc.perl.org/FindBin.html)
+* Perl module [Cwd](https://perldoc.perl.org/Cwd.html)
 
 Most of these modules shall be already installed with a default Perl installation. Please follow the links above if this is not the case.
 
 ## Downloading
 Install httpd-exporter by cloning the Git repository:
 
-	`git clone https://github.com/technicalguru/httpd-exporter`
+`git clone https://github.com/technicalguru/httpd-exporter`
 
 ## Testing
 Test your installation by invoking:
 
-	`<path-to-installation>/exporterd.pl --test`
+`<path-to-installation>/exporterd.pl --test`
 
 A successful test will not produce any output.
 
@@ -50,13 +50,13 @@ See the [Configuration](configuration.md) page for more details.
 ## Invoking the httpd-exporter
 The following command invokes the httpd-exporter:
 
-	`<path-to-installation>/exporterd.pl`
+`<path-to-installation>/exporterd.pl`
 
 The httpd-exporter will try to find your configuration file in the following order:
 
-	1. The path to the file was given as argument to the script (`exporterd.pl exporter.conf`).
-	1. The path to the file is passed by environment variable `HTTPD_EXPORTER_CONFIG_FILE`.
-	1. Default location is assumed: `/etc/httpd-exporter/exporter.conf`.
+1. The path to the file was given as argument to the script (`exporterd.pl exporter.conf`).
+1. The path to the file is passed by environment variable `HTTPD_EXPORTER_CONFIG_FILE`.
+1. Default location is assumed: `/etc/httpd-exporter/exporter.conf`.
 
 httpd-exporter will fail to start when the file was not found or is not readable.
 
@@ -64,24 +64,24 @@ httpd-exporter will fail to start when the file was not found or is not readable
 Please notice that you will need an additional HTTPD product (Apache, nginx, ...) that needs to serve
 the metrics file produced by the httpd-exporter at the following URL:
 
-	`http://<your-host-name>:9386/metrics`
+`http://<your-host-name>:9386/metrics`
 
 ## Linking Prometheus to metrics
 Prometheus requires the following configuration to scrape the metrics:
 
-	TBD
+TBD
 
 ## Docker image
 There is a [Docker](https://docker.io/) image available including a [Kubernetes](https://kubernetes.io/) 
 YAML description for installation at:
 
-	[https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
+> [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
 # Contribution
 
-	TBD
+TBD
 
 # Further Readings
 
-	TBD
+TBD
 
