@@ -16,7 +16,7 @@ httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernete
 environment. However, it cannot be regarded as mature because the project was initiated for and tested in that 
 very specific environment only.
 
-#Installing
+# Installing
 ## Prerequisites
 htppd-exporter is written in Perl. The following prerequisites apply:
 
@@ -30,12 +30,12 @@ Most of these modules shall be already installed with a default Perl installatio
 ## Downloading
 Install httpd-exporter by cloning the Git repository:
 
-`git clone https://github.com/technicalguru/httpd-exporter`
+> `git clone https://github.com/technicalguru/httpd-exporter`
 
 ## Testing
 Test your installation by invoking:
 
-`<path-to-installation>/exporterd.pl --test`
+> `<path-to-installation>/exporterd.pl --test`
 
 A successful test will not produce any output.
 
@@ -44,13 +44,13 @@ httpd-exporter requires a configuration file describing the log files to scrape 
 is part of the installation (`exporter.conf`) which you should install in directory `/etc/httpd-exporter`. Edit the file then to reflect
 your installation. 
 
-See the [Configuration](configuration.md) page for more details.
+See the [Configuration](CONFIGURATION.md) page for more details.
 
 # Running
 ## Invoking the httpd-exporter
 The following command invokes the httpd-exporter:
 
-`<path-to-installation>/exporterd.pl`
+> `<path-to-installation>/exporterd.pl`
 
 The httpd-exporter will try to find your configuration file in the following order:
 
@@ -64,7 +64,7 @@ httpd-exporter will fail to start when the file was not found or is not readable
 Please notice that you will need an additional HTTPD product (Apache, nginx, ...) that needs to serve
 the metrics file produced by the httpd-exporter at the following URL:
 
-`http://<your-host-name>:9386/metrics`
+> http://<your-host-name>:9386/metrics
 
 ## Linking Prometheus to metrics
 Prometheus requires the following configuration to scrape the metrics:
