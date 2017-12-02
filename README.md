@@ -2,6 +2,20 @@
 [Prometheus](https://prometheus.io/) Metrics exporter for HTTP daemons (Apache, nginx, ...) based on 
 access log file scraping.
 
+* [Description](#user-content-description)
+* [Status](#user-content-status)
+* [Installation](#user-content-installation)
+** [Prerequisites](#user-content-prerequisites)
+** [Downloading](#user-content-downloading)
+** [Testing](#user-content-testing)
+* [Configuration](#user-content-configuration)
+* [Running](#user-content-running)
+** [Invoking the httpd-exporter](#user-content-invoking-the-httpd-exporter)
+** [Exposing metrics](#user-content-exposing-metrics)
+** [Linking Prometheus to metrics](#user-content-linking-prometheus-to-metrics)
+** [Docker Image](#user-content-docker-image)
+* [Contribution](#user-content-contribution)
+* [Further Readings](#user-content-further-readings)
 # Description
 httpd-exporter was written because there were no [Prometheus exporters](https://prometheus.io/docs/instrumenting/exporters/)
 that were able to expose information from arbitrary HTTPD log files **and** able to handle multiple logfiles 
@@ -16,7 +30,7 @@ httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernete
 environment. However, it cannot be regarded as mature because the project was initiated for and tested in that 
 very specific environment only.
 
-# Installing
+# Installation
 ## Prerequisites
 htppd-exporter is written in Perl. The following prerequisites apply:
 
