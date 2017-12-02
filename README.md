@@ -2,6 +2,7 @@
 [Prometheus](https://prometheus.io/) Metrics exporter for HTTP daemons (Apache, nginx, ...) based on 
 access log file scraping.
 
+# Table of Contents
 * [Description](#user-content-description)
 * [Status](#user-content-status)
 * [Installation](#user-content-installation)
