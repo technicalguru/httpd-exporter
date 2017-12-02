@@ -35,7 +35,7 @@ Install httpd-exporter by cloning the Git repository:
 ## Testing
 Test your installation by invoking:
 
-> `<path-to-installation>/exporterd.pl --test`
+> `&lt;path-to-installation&gt;/exporterd.pl --test`
 
 A successful test will not produce any output.
 
@@ -50,7 +50,7 @@ See the [Configuration](CONFIGURATION.md) page for more details.
 ## Invoking the httpd-exporter
 The following command invokes the httpd-exporter:
 
-> `<path-to-installation>/exporterd.pl`
+> `&lt;path-to-installation&gt;/exporterd.pl`
 
 The httpd-exporter will try to find your configuration file in the following order:
 
@@ -64,7 +64,7 @@ httpd-exporter will fail to start when the file was not found or is not readable
 Please notice that you will need an additional HTTPD product (Apache, nginx, ...) that needs to serve
 the metrics file produced by the httpd-exporter at the following URL:
 
-> http://<your-host-name>:9386/metrics
+> http://&lt;your-host-name&gt;:9386/metrics
 
 ## Linking Prometheus to metrics
 Prometheus requires the following configuration to scrape the metrics:
