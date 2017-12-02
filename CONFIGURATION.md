@@ -3,9 +3,9 @@
 ## The configuration file
 A configuration file consists of at least three sections:
 
-1. A [General](#General) section describing the metrics
-1. A [LogFormats](#LogFormats) section describing how a HTTPD log line must look like for scraping
-1. One or several [Location](#Location) sections describing each group of log files to scrape
+1. A [General](#user-content-general-section) section describing the metrics
+1. A [LogFormats](#user-content-logformats-section) section describing how a HTTPD log line must look like for scraping
+1. One or several [Location](#user-content-location-sections) sections describing each group of log files to scrape
 
 ## Example configuration
 
