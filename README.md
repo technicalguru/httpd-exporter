@@ -35,7 +35,7 @@ Install httpd-exporter by cloning the Git repository:
 ## Testing
 Test your installation by invoking:
 
-> `&lt;path-to-installation&gt;/exporterd.pl --test`
+> `<path-to-installation>/exporterd.pl --test`
 
 A successful test will not produce any output.
 
@@ -50,7 +50,7 @@ See the [Configuration](CONFIGURATION.md) page for more details.
 ## Invoking the httpd-exporter
 The following command invokes the httpd-exporter:
 
-> `&lt;path-to-installation&gt;/exporterd.pl`
+> `<path-to-installation>/exporterd.pl`
 
 The httpd-exporter will try to find your configuration file in the following order:
 
