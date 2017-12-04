@@ -74,10 +74,10 @@ Test Summary: 12 total, 0 failed, 12 passed
 
 # Configuration
 httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. A default configuration file
-is part of the installation ([exporter.conf](exporter.conf)) which you should install in directory `/etc/httpd-exporter`. Edit the file then to reflect
+is part of the installation ([exporter.conf](examples/exporter.conf)) which you should install in directory `/etc/httpd-exporter`. Edit the file then to reflect
 your installation. 
 
-See the [Configuration](CONFIGURATION.md) page for more details.
+See the [Configuration](help/CONFIGURATION.md) page for more details.
 
 # Running
 ## Invoking the httpd-exporter
@@ -109,7 +109,12 @@ There is a [Docker](https://docker.io/) image available:
 
 > [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
-The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](httpd-exporter.yaml).
+The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](contrib/k8s-daemonset.yaml).
+Install it via:
+
+```
+kubectl apply -f https://github.com/technicalguru/httpd-exporter/contrib/k8s-daemonset.yaml
+```
 
 # Metrics Exposed
 The httpd-exporter exposes the following metrics:
@@ -122,12 +127,12 @@ The httpd-exporter exposes the following metrics:
  # HELP http_sent_bytes Number of bytes transferred as logged by HTTP daemon
 ```
 
-Metrics are attributed with appropriate labels as defined by the [configuration file](CONFIGURATION.md). You might 
+Metrics are attributed with appropriate labels as defined by the [configuration file](help/CONFIGURATION.md). You might 
 require the following Prometheus expressions to query your HTTPD status:
 
 ```
 delta(http_requests_total{code!="2xx"}[5m])  - returns number of requests in the last 5 minutes for each label combination that was not successful
-sum(delta(http_requests_total{code!="2xx"}[5m])) - return the total count of requests in the last 5 minutes that failed
+sum(delta(http_requests_total{code!="2xx"}[5m])) - returns the total count of requests in the last 5 minutes that failed
 ```
 
 # Contribution
@@ -136,7 +141,8 @@ Please contact @technicalguru if you want to contribute. Any improvement is high
 
 # Further Readings
 
-* [Configuration](CONFIGURATION.md)
+* [Configuration](help/CONFIGURATION.md)
+'''
 * [DockerHub Image](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
 
