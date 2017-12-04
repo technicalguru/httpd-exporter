@@ -12,6 +12,9 @@ A configuration file consists of at least three sections:
 ```
 [General]
 metricsFile=/var/www/html/metrics
+addLabels=method
+addStatusGroupLabel=status
+collectBytesTransferred=bytes_sent
 
 [LogFormats]
 # Format used mostly in reverse proxy installations
@@ -37,6 +40,9 @@ This is a `key=value` section. The following values can be configured:
 Key|Value|Required|Default|Description
 ---|-----|--------|-------|-----------
 metricsFile|&lt;path&gt;|YES|-|The path to the file where metrics will be stored and served by your HTTPD product. Usually `/var/www/html/metrics`.
+addLabels|&lt;name-of-variable&gt;|NO|-|Add a label based on the variable of the given name(s) - comma-separated list.
+addStatusGroupLabel|&lt;name-of-variable&gt;|NO|-|Group metrics by the HTTP status code which is given by the variable of the given name.
+collectBytesTransferred||&lt;name-of-variable&gt;|NO|-|Add a http_sent_bytes metrics and add up the values of the variable of the given name.
 
 ## LogFormats Section
 This is a list section. Each line gives a description of log line that can occur in your installation. These are basically regular Perl expressions

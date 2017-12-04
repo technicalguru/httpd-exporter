@@ -15,6 +15,7 @@ access log file scraping.
   * [Exposing metrics](#user-content-exposing-metrics)
   * [Linking Prometheus to metrics](#user-content-linking-prometheus-to-metrics)
   * [Docker Image](#user-content-docker-image)
+* [Metrics Exposed](#user-content-metrics-exposed)
 * [Contribution](#user-content-contribution)
 * [Further Readings](#user-content-further-readings)
 
@@ -54,7 +55,22 @@ Test your installation by invoking:
 
 > `<path-to-installation>/exporterd.pl --test`
 
-A successful test will not produce any output.
+A successful test will produce an output similar to this:
+'''
+1/12...OK
+2/12...OK
+3/12...OK
+4/12...OK
+5/12...OK
+6/12...OK
+7/12...OK
+8/12...OK
+9/12...OK
+10/12...OK
+11/12...OK
+12/12...OK
+Test Summary: 12 total, 0 failed, 12 passed
+'''
 
 # Configuration
 httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. A default configuration file
@@ -94,6 +110,25 @@ There is a [Docker](https://docker.io/) image available:
 > [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
 The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](httpd-exporter.yaml).
+
+# Metrics Exposed
+The httpd-exporter exposes the following metrics:
+
+'''
+ # TYPE http_requests_total Counter
+ # HELP http_requests_total Counts the requests that were logged by HTTP daemon
+ ...
+ # TYPE http_sent_bytes Counter
+ # HELP http_sent_bytes Number of bytes transferred as logged by HTTP daemon
+'''
+
+Metrics are attributed with appropriate labels as defined by the [configuration file](CONFIGURATION.md). You might 
+require the following Prometheus expressions to query your HTTPD status:
+
+'''
+delta(http_requests_total{code!="2xx"}[5m])  - returns number of requests in the last 5 minutes for each label combination that was not successful
+sum(delta(http_requests_total{code!="2xx"}[5m])) - return the total count of requests in the last 5 minutes that failed
+'''
 
 # Contribution
 
