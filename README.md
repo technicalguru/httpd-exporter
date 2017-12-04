@@ -114,21 +114,21 @@ The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is ava
 # Metrics Exposed
 The httpd-exporter exposes the following metrics:
 
-'''
+```
  # TYPE http_requests_total Counter
  # HELP http_requests_total Counts the requests that were logged by HTTP daemon
  ...
  # TYPE http_sent_bytes Counter
  # HELP http_sent_bytes Number of bytes transferred as logged by HTTP daemon
-'''
+```
 
 Metrics are attributed with appropriate labels as defined by the [configuration file](CONFIGURATION.md). You might 
 require the following Prometheus expressions to query your HTTPD status:
 
-'''
+```
 delta(http_requests_total{code!="2xx"}[5m])  - returns number of requests in the last 5 minutes for each label combination that was not successful
 sum(delta(http_requests_total{code!="2xx"}[5m])) - return the total count of requests in the last 5 minutes that failed
-'''
+```
 
 # Contribution
 
