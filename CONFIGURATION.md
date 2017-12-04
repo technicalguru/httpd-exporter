@@ -27,11 +27,11 @@ referrer}|-) (%{QS:agent}|-)
 
 [/var/log/apache2/access.log]
 type=httpd
-labels={ "instance" : "$HOST_IP", "hostname" : "$HOSTNAME" }
+labels={ "instance.ip" : "${HOSTIP}", "instance.hostname" : "${HOSTNAME}" }
 
 [/var/lib/docker/containers/*]
 type=kubernetes
-labels={ "instance" : "$HOSTIP", "HOSTNAME" : "$HOSTNAME", "container.name" : "$CONTAINER_NAME" }
+labels={ "instance.ip" : "${HOSTIP}", "instance.hostname" : "${HOSTNAME}" }
 ```
 
 ## General Section

@@ -56,7 +56,7 @@ Test your installation by invoking:
 > `<path-to-installation>/exporterd.pl --test`
 
 A successful test will produce an output similar to this:
-'''
+```
 1/12...OK
 2/12...OK
 3/12...OK
@@ -70,7 +70,7 @@ A successful test will produce an output similar to this:
 11/12...OK
 12/12...OK
 Test Summary: 12 total, 0 failed, 12 passed
-'''
+```
 
 # Configuration
 httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. A default configuration file
