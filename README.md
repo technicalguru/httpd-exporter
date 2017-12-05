@@ -154,6 +154,7 @@ Please contact @technicalguru if you want to contribute. Any improvement is high
 # Further Readings
 
 * [Configuration](help/CONFIGURATION.md)
+* [Frequentyl Asked Questions](help/FAQ.md)
 * [DockerHub Image](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
 
