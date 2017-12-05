@@ -67,7 +67,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: httpd-exporter
-        image: technicalguru/httpd-exporter:alpha
+        image: technicalguru/httpd-exporter:current
         imagePullPolicy: Always
         resources:
           limits:
