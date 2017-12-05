@@ -29,6 +29,8 @@ data:
     addLabels=method
     addStatusGroupLabel=status
     collectBytesTransferred=bytes_sent
+    retentionSeconds=3600
+    deadLabels=method,status
 
     [LogFormats]
     %{HOSTNAME:hostname}(:%{INT:port})? %{IP:clientip} %{NOTSPACE:rlogname} %{NOTSPACE:user} \[%{HTTPDATE:timestamp}\] "%{REQUEST_LINE}" %{INT:status} %{INT:bytes_sent} (%{QS:referrer}|-) (%{QS:agent}|-)
