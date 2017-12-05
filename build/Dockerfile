@@ -21,12 +21,12 @@ RUN mkdir /usr/local/httpd-exporter \
     && mkdir /usr/local/httpd-exporter\help    \
     && mkdir /usr/local/httpd-exporter\contrib \
     && mkdir /usr/local/httpd-exporter\examples
-COPY exporterd.pl /usr/local/httpd-exporter/
-COPY modules/*    /usr/local/httpd-exporter/modules/
-COPY test/*       /usr/local/httpd-exporter/test/
-COPY help/*       /usr/local/httpd-exporter/help/
-COPY contrib/*    /usr/local/httpd-exporter/contrib/
-COPY examples/*   /usr/local/httpd-exporter/examples/
+COPY ./exporterd.pl /usr/local/httpd-exporter/
+COPY ./modules/*    /usr/local/httpd-exporter/modules/
+COPY ./test/*       /usr/local/httpd-exporter/test/
+COPY ./help/*       /usr/local/httpd-exporter/help/
+COPY ./contrib/*    /usr/local/httpd-exporter/contrib/
+COPY ./examples/*   /usr/local/httpd-exporter/examples/
 
 RUN chmod 755 /usr/local/httpd-exporter/*.pl
 

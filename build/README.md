@@ -10,9 +10,7 @@ httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernete
 # How to use this image
 
 * **Configuration File**
-httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. You need to copy/mount your configuration in directory `/etc/httpd-exporter` or provide the location via environment variable `HTTPD_EXPORTER_CONFIG_FILE`.
-
-See the [Configuration](https://github.com/technicalguru/httpd-exporter/help/CONFIGURATION.md) page for more details.
+httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. You need to copy/mount your configuration in directory `/etc/httpd-exporter` or provide the location via environment variable `HTTPD_EXPORTER_CONFIG_FILE`. See the [Configuration](https://github.com/technicalguru/httpd-exporter/help/CONFIGURATION.md) page for more details.
 
 * **HTTPD Log Files**
 httpd-exporter scrapes log files. The configuration file must list all the locations where these log files are available. Make sure you mount your log files to be analyzed into the container at the right place. Please notice that - due to a Docker limitation - httpd-exporter requires to run as user root in order to have access to Docker container log files.
@@ -61,5 +59,6 @@ sum(delta(http_requests_total{status!="2xx"}[5m])) - returns the total count of 
 
 * [Documentation](https://github.com/technicalguru/httpd-exporter/README.md)
 * [Configuration](https://github.com/technicalguru/httpd-exporter/help/CONFIGURATION.md)
+* [FAQ](https://github.com/technicalguru/httpd-exporter/help/FAQ.md)
 
 
