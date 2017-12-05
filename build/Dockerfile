@@ -35,7 +35,6 @@ RUN mkdir /etc/httpd-exporter
 RUN chmod 777 /etc/httpd-exporter
 
 # Test
-RUN ls -laR /usr/local/httpd-exporter
 RUN /usr/local/httpd-exporter/exporterd.pl --test
 
 # Run as root (unfortunately) to make sure we can read and write the mounted dirs
