@@ -24,6 +24,9 @@ httpd-exporter was written because there were no [Prometheus exporters](https://
 that were able to expose information from arbitrary HTTPD log files **and** able to handle multiple logfiles 
 within the same instance **and** able to discover these log files automatically while running.
 
+The emphasis of httpd-exporter is to expose the number of requests that returned with a certain status. Most of
+current exporters for Apache et al. cannot deliver this kind of metrics. 
+
 This is especially required when a [Kubernetes](https://kubernetes.io/) cluster or other major [Docker](https://docker.io/) 
 installations exist in production. httpd-exporter will provide an insight into the health of single HTTPD 
 instances (aka microservices).
@@ -122,17 +125,23 @@ The httpd-exporter exposes the following metrics:
 ```
  # TYPE http_requests_total Counter
  # HELP http_requests_total Counts the requests that were logged by HTTP daemon
- ...
+ http_requests_total{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"2xx"} 5432 1512397393
+ http_requests_total{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"4xx"} 32 1512397393
+ http_requests_total{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"5xx"} 5 1512397393
+
  # TYPE http_sent_bytes Counter
  # HELP http_sent_bytes Number of bytes transferred as logged by HTTP daemon
+ http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"2xx"} 235432 1512397393
+ http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"4xx"} 3782 1512397393
+ http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"5xx"} 4375 1512397393
 ```
 
 Metrics are attributed with appropriate labels as defined by the [configuration file](help/CONFIGURATION.md). You might 
 require the following Prometheus expressions to query your HTTPD status:
 
 ```
-delta(http_requests_total{code!="2xx"}[5m])  - returns number of requests in the last 5 minutes for each label combination that was not successful
-sum(delta(http_requests_total{code!="2xx"}[5m])) - returns the total count of requests in the last 5 minutes that failed
+delta(http_requests_total{status!="2xx"}[5m])  - returns number of requests in the last 5 minutes for each label combination that were not successful
+sum(delta(http_requests_total{status!="2xx"}[5m])) - returns the total count of requests in the last 5 minutes that failed
 ```
 
 # Contribution
@@ -142,7 +151,6 @@ Please contact @technicalguru if you want to contribute. Any improvement is high
 # Further Readings
 
 * [Configuration](help/CONFIGURATION.md)
-'''
 * [DockerHub Image](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
 
