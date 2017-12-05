@@ -38,8 +38,7 @@ RUN chmod 777 /etc/httpd-exporter
 RUN ls -laR /usr/local/httpd-exporter
 RUN /usr/local/httpd-exporter/exporterd.pl --test
 
-# Run
+# Run as root (unfortunately) to make sure we can read and write the mounted dirs
 WORKDIR /usr/local/httpd-exporter
-USER www-data:www-data
 CMD /usr/local/httpd-exporter/exporterd.pl
 

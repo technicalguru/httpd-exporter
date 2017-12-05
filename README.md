@@ -14,7 +14,7 @@ access log file scraping.
   * [Invoking the httpd-exporter](#user-content-invoking-the-httpd-exporter)
   * [Exposing metrics](#user-content-exposing-metrics)
   * [Linking Prometheus to metrics](#user-content-linking-prometheus-to-metrics)
-  * [Docker Image](#user-content-docker-image)
+* [Docker Image](#user-content-docker-image)
 * [Metrics Exposed](#user-content-metrics-exposed)
 * [Contribution](#user-content-contribution)
 * [Further Readings](#user-content-further-readings)
@@ -45,9 +45,9 @@ htppd-exporter is written in Perl. The following prerequisites apply:
 * Perl module [JSON::XS](http://search.cpan.org/~mlehmann/JSON-XS-3.04/XS.pm)
 * Perl module [FindBin](https://perldoc.perl.org/FindBin.html)
 * Perl module [Cwd](https://perldoc.perl.org/Cwd.html)
-* Perl module [File::Basename]()
-* Perl module [Sys::Hostname]()
-* Perl module [Socket]()
+* Perl module [File::Basename](https://perldoc.perl.org/File/Basename.html)
+* Perl module [Sys::Hostname](https://perldoc.perl.org/Sys/Hostname.html)
+* Perl module [Socket](https://perldoc.perl.org/Socket.html)
 
 Most of these modules shall be already installed with a default Perl installation. Please follow the links above if this is not the case.
 
@@ -115,11 +115,11 @@ There is a [Docker](https://docker.io/) image available:
 
 > [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
-The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](contrib/k8s-daemonset.yaml).
+The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](contrib/kubernetes/exporter.yaml).
 Install it via:
 
 ```
-kubectl apply -f https://github.com/technicalguru/httpd-exporter/contrib/k8s-daemonset.yaml
+kubectl apply -f https://github.com/technicalguru/httpd-exporter/contrib/kubernetes/exporter.yaml
 ```
 
 # Metrics Exposed
