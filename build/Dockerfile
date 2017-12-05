@@ -21,6 +21,8 @@ RUN mkdir /usr/local/httpd-exporter \
     && mkdir /usr/local/httpd-exporter\help    \
     && mkdir /usr/local/httpd-exporter\contrib \
     && mkdir /usr/local/httpd-exporter\examples
+RUN pwd
+RUN ls -laR
 COPY ./exporterd.pl /usr/local/httpd-exporter/
 COPY ./modules/*    /usr/local/httpd-exporter/modules/
 COPY ./test/*       /usr/local/httpd-exporter/test/
