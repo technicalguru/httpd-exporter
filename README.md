@@ -45,6 +45,9 @@ htppd-exporter is written in Perl. The following prerequisites apply:
 * Perl module [JSON::XS](http://search.cpan.org/~mlehmann/JSON-XS-3.04/XS.pm)
 * Perl module [FindBin](https://perldoc.perl.org/FindBin.html)
 * Perl module [Cwd](https://perldoc.perl.org/Cwd.html)
+* Perl module [File::Basename]()
+* Perl module [Sys::Hostname]()
+* Perl module [Socket]()
 
 Most of these modules shall be already installed with a default Perl installation. Please follow the links above if this is not the case.
 
