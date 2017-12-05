@@ -9,8 +9,11 @@ use JSON::XS;
 sub new {
 	my $class = shift;
 	my $self  = { 
-		'name'   => shift,
-		'values' => {},
+		'name'       => shift,
+		'values'     => {},
+		'timestamps' => {},
+		'deadLabels' => [],
+		'retentionSeconds' => 3600,
 	};
 	return bless $self, $class;
 }
@@ -29,6 +32,26 @@ sub setType {
 	my $self  = shift; 
 	my $type  = shift;
 	$self->{type} = $type;
+}
+
+# Adds a label to be used for dead series
+# Arguments: $label - label for dead values
+sub addDeadLabel {
+	my $self  = shift;
+	my $label = shift;
+
+	push(@{$self->{deadLabels}}, $label);
+}
+
+# Sets the rentention period in seconds.
+# The retention period marks the time a certain value will be regarded as
+# expired and therefore move to the dead values.
+# Arguments: $value - rentention period in seconds
+sub setRetentionSeconds {
+	my $self  = shift;
+	my $value = shift;
+	$value = 3600 if !defined($value);
+	$self->{retentionSeconds} = $value;
 }
 
 # standardizes the labels given for storing in this metric
@@ -84,27 +107,35 @@ sub getLabels {
 }
 
 # Sets the value for this metric
-# Arguments: $value  - the value
-#            $labels - JSON-encoded map of labels
+# Arguments: $value     - the value
+#            $labels    - JSON-encoded map of labels
+#            $timestamp - timestamp of this value (optional)
 sub set {
-	my $self   = shift; 
-	my $value  = shift;
-	my $labels = shift;
-	$labels = $self->standardLabels($labels);
+	my $self      = shift; 
+	my $value     = shift;
+	my $labels    = shift;
+	my $timestamp = shift;
+	$labels       = $self->standardLabels($labels);
+	$timestamp    = time() if !defined($timestamp);
 
 	if ($labels) {
-		$self->{values}->{$labels} = $value;
+		$self->{values}->{$labels}     = $value;
+		$self->{timestamps}->{$labels} = $timestamp;
 	} else {
-		$self->{value} = $value;
+		$self->{value}     = $value;
+		$self->{timestamp} = $timestamp;
 	}
 }
 
 # Increases the value for this metric
 # Arguments: $labels - JSON-encoded map of labels
+#            $timestamp - timestamp of this value (optional)
 sub inc {
-	my $self   = shift; 
-	my $labels = shift;
-	$labels = $self->standardLabels($labels);
+	my $self      = shift; 
+	my $labels    = shift;
+	my $timestamp = shift;
+	$labels       = $self->standardLabels($labels);
+	$timestamp    = time() if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -112,21 +143,26 @@ sub inc {
 		} else {
 			$self->{values}->{$labels} = 1;
 		}
+		$self->{timestamps}->{$labels} = $timestamp;
 	} else {
 		if (exists($self->{value})) {
 			$self->{value}++;
 		} else {
 			$self->{value} = 1;
 		}
+		$self->{timestamp} = $timestamp;
 	}
 }
 
 # Decreases the value for this metric
 # Arguments: $labels - JSON-encoded map of labels
+#            $timestamp - timestamp of this value (optional)
 sub dec {
-	my $self   = shift; 
-	my $labels = shift;
-	$labels = $self->standardLabels($labels);
+	my $self      = shift; 
+	my $labels    = shift;
+	my $timestamp = shift;
+	$labels       = $self->standardLabels($labels);
+	$timestamp    = time() if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -134,23 +170,28 @@ sub dec {
 		} else {
 			$self->{values}->{$labels} = -1;
 		}
+		$self->{timestamps}->{$labels} = $timestamp;
 	} else {
 		if (exists($self->{value})) {
 			$self->{value}--;
 		} else {
 			$self->{value} = -1;
 		}
+		$self->{timestamp} = $timestamp;
 	}
 }
 
 # Adds the value for this metric.
 # Arguments: $value  - the value to add
 #            $labels - JSON-encoded map of labels
+#            $timestamp - timestamp of this value (optional)
 sub add {
-	my $self   = shift;
-	my $value  = shift;
-	my $labels = shift;
-	$labels = $self->standardLabels($labels);
+	my $self      = shift;
+	my $value     = shift;
+	my $labels    = shift;
+	my $timestamp = shift;
+	$labels       = $self->standardLabels($labels);
+	$timestamp    = time() if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -158,23 +199,28 @@ sub add {
 		} else {
 			$self->{values}->{$labels} = $value;
 		}
+		$self->{timestamps}->{$labels} = $timestamp;
 	} else {
 		if (exists($self->{value})) {
 			$self->{value} += $value;
 		} else {
 			$self->{value} = $value;
 		}
+		$self->{timestamp} = $timestamp;
 	}
 }
 
 # Subtracts the value for this metric.
 # Arguments: $value  - the value to subtract
 #            $labels - JSON-encoded map of labels
+#            $timestamp - timestamp of this value (optional)
 sub sub {
-	my $self   = shift;
-	my $value  = shift;
-	my $labels = shift;
-	$labels = $self->standardLabels($labels);
+	my $self      = shift;
+	my $value     = shift;
+	my $labels    = shift;
+	my $timestamp = shift;
+	$labels       = $self->standardLabels($labels);
+	$timestamp    = time() if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -182,11 +228,54 @@ sub sub {
 		} else {
 			$self->{values}->{$labels} = 0-$value;
 		}
+		$self->{timestamps}->{$labels} = $timestamp;
 	} else {
 		if (exists($self->{value})) {
 			$self->{value} -= $value;
 		} else {
 			$self->{value} = 0-$value;
+		}
+		$self->{timestamp} = $timestamp;
+	}
+}
+
+# Compute the dead label from the given label string.
+# Arguments: $labels - labels to be transformed
+# Returns: the dead label string
+sub getDeadLabel {
+	my $self   = shift;
+	my $labels = from_json(shift);
+	my $rc     = {};
+
+	my $key;
+	foreach $key (@{$self->{deadLabels}}) {
+		if (exists($labels->{$key})) {
+			$rc->{$key} = $labels->{$key};
+		}
+	}
+	$rc->{deadCounter} = "true";
+
+	return $self->standardLabels($rc);
+}
+
+# Checks the retention of all values and moves those series to dead values.
+# This is required to ensure that sum() queries in Prometheus always go up.
+# Arguments: (none)
+sub checkRentention {
+	my $self = shift;
+	my $now  = time();
+
+	if ($self->getLabels()) {
+		my $label;
+		foreach $label ($self->getLabels()) {
+			# ignore dead labels!
+			next if $label =~ /"deadCounter":"true"/;
+			my $timestamp = $self->{timestamps}->{$label};
+			if ($now - $timestamp > $self->{retentionSeconds}) {
+				$self->add($self->{values}->{$label}, $self->getDeadLabel($label));
+				delete($self->{values}->{$label});
+				delete($self->{timestamps}->{$label});
+			}
 		}
 	}
 }
@@ -197,8 +286,9 @@ sub getExposure {
 	my $self   = shift;
 	my $format = shift;
 	my ($rc, $label, $time);
-	$time = time;
 	$rc   = '';
+
+	$self->checkRentention();
 
 	if ($self->getLabels() || exists($self->{value})) {
 		# print TYPE
@@ -211,11 +301,11 @@ sub getExposure {
 		}
 		# print simple value
 		if (exists($self->{value})) {
-			$rc .= $self->{name}.' '.$self->{value}.' '.$time."\n";
+			$rc .= $self->{name}.' '.$self->{value}.' '.$self->{timestamp}."\n";
 		}
 		# print labelled values
 		foreach $label ($self->getLabels()) {
-			$rc .= $self->{name}.$label.' '.$self->get($label).' '.$time."\n";
+			$rc .= $self->{name}.$label.' '.$self->get($label).' '.$self->{timestamps}->{$label}."\n";
 		}
 	}
 	return $rc;
