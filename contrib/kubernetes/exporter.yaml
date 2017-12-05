@@ -1,5 +1,28 @@
 apiVersion: v1
 data:
+  default.conf: |
+    server {
+        listen       9386;
+        server_name  localhost;
+    
+        location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+            location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: httpd-config
+  namespace: monitoring
+---
+---
+apiVersion: v1
+data:
   exporter.conf: |
     [General]
     metricsFile=/var/www/html/metrics
@@ -43,6 +66,7 @@ spec:
       containers:
       - name: httpd-exporter
         image: technicalguru/httpd-exporter:alpha
+        imagePullPolicy: Always
         resources:
           limits:
             memory: 200Mi
@@ -57,11 +81,34 @@ spec:
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
+      - name: httpd
+        image: nginx
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        ports:
+        - containerPort: 9386
+          name: httpd-exporter
+        env:
+        - name: NGINX_PORT
+          value: "9386"
+        volumeMounts:
+        - name: nginxconfig
+          mountPath: /etc/nginx/conf.d
+        - name: varwww
+          mountPath: /usr/share/nginx/html
       terminationGracePeriodSeconds: 30
       volumes:
       - name: etcconfig
         configMap:
           name: httpd-exporter-config
+      - name: nginxconfig
+        configMap:
+          name: httpd-config
       - name: varwww
         hostPath:
           path: /var/www/html
