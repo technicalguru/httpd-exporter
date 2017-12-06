@@ -311,4 +311,34 @@ sub getExposure {
 	return $rc;
 }
 
+# Parse a label string to a hasref.
+# Arguments: $s - label string
+sub from_label_string {
+	my $s  = shift;
+	my $rc = {};
+
+	while ($s =~ /([^\{\},\s=]+)="([^"\{\}]*)"/g) {
+		my $key = $1;
+		my $val = $2;
+		$rc->{$key} = $val;
+	}
+	return $rc;
+}
+
+# Take a hashref and create a label string from it.
+# Arguments: $labels - hashref to labels
+sub to_label_string {
+	my $labels = shift;
+
+	my @KEYS  = sort(keys(%{$labels}));
+	my @PARTS = ();
+	my $key;
+	foreach $key (@KEYS) {
+		my $s = $key.'="'.$labels->{$key}.'"';
+		push(@PARTS, $s);
+	}
+
+	return "{".join(',', @PARTS)."}";
+}
+
 1;
