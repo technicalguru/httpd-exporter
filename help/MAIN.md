@@ -126,17 +126,17 @@ kubectl apply -f https://github.com/technicalguru/httpd-exporter/master/contrib/
 The httpd-exporter exposes the following metrics:
 
 ```
- # TYPE http_requests_total Counter
+ # TYPE http_requests_total counter
  # HELP http_requests_total Counts the requests that were logged by HTTP daemon
- http_requests_total{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"2xx"} 5432 1512397393
- http_requests_total{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"4xx"} 32 1512397393
- http_requests_total{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"5xx"} 5 1512397393
+ http_requests_total{method="GET",status="2xx"} 5432 1512397393
+ http_requests_total{method="GET",status="4xx"} 32 1512397393
+ http_requests_total{method="GET",status="5xx"} 5 1512397393
 
- # TYPE http_sent_bytes Counter
+ # TYPE http_sent_bytes counter
  # HELP http_sent_bytes Number of bytes transferred as logged by HTTP daemon
- http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"2xx"} 235432 1512397393
- http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"4xx"} 3782 1512397393
- http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"5xx"} 4375 1512397393
+ http_sent_bytes{method="GET",status="2xx"} 235432 1512397393
+ http_sent_bytes{method="GET",status="4xx"} 3782 1512397393
+ http_sent_bytes{method="GET",status="5xx"} 4375 1512397393
 ```
 
 Metrics are attributed with appropriate labels as defined by the [configuration file](CONFIGURATION.md). You might 
