@@ -38,7 +38,7 @@ sub new {
 	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_requests_total', 'Counter', 'Counts the requests that were logged by HTTP daemon'));
 	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_sent_bytes', 'Counter', 'Number of bytes transferred as logged by HTTP daemon'));
 	my $label;
-	foreach $label (split(@{$self->{config}->getGeneral('deadLabels')})) {
+	foreach $label (split(',', $self->{config}->getGeneral('deadLabels'))) {
 		my $m;
 		foreach $m (@METRICS) {
 			$m->addDeadLabel($label);
