@@ -1,122 +1,36 @@
-# httpd-exporter
-[Prometheus](https://prometheus.io/) Metrics exporter for HTTP daemons (Apache, nginx, ...) based on 
-access log file scraping.
+## httpd-exporter
+[Prometheus](https://prometheus.io/) Metrics exporter for HTTP daemons (Apache, nginx, ...) based on access log file scraping.
 
-# Table of Contents
-* [Description](#user-content-description)
-* [Status](#user-content-status)
-* [Installation](#user-content-installation)
-  * [Prerequisites](#user-content-prerequisites)
-  * [Downloading](#user-content-downloading)
-  * [Testing](#user-content-testing)
-* [Configuration](#user-content-configuration)
-* [Running](#user-content-running)
-  * [Invoking the httpd-exporter](#user-content-invoking-the-httpd-exporter)
-  * [Exposing metrics](#user-content-exposing-metrics)
-  * [Linking Prometheus to metrics](#user-content-linking-prometheus-to-metrics)
-* [Docker Image](#user-content-docker-image)
-* [Metrics Exposed](#user-content-metrics-exposed)
-* [Contribution](#user-content-contribution)
-* [Further Readings](#user-content-further-readings)
-
-# Description
-httpd-exporter was written because there were no [Prometheus exporters](https://prometheus.io/docs/instrumenting/exporters/)
-that were able to expose information from arbitrary HTTPD log files **and** able to handle multiple logfiles 
-within the same instance **and** able to discover these log files automatically while running.
-
-The emphasis of httpd-exporter is to expose the number of requests that returned with a certain status. Most of
-current exporters for Apache et al. cannot deliver this kind of metrics. 
-
-This is especially required when a [Kubernetes](https://kubernetes.io/) cluster or other major [Docker](https://docker.io/) 
-installations exist in production. httpd-exporter will provide an insight into the health of single HTTPD 
-instances (aka microservices).
+# Supported Tags
+* `current` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/build/Dockerfile)) - latest (unstable) development image
 
 # Status
-httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernetes](https://kubernetes.io/)
-environment. However, it cannot be regarded as mature because the project was initiated for and tested in that 
-very specific environment only.
+httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernetes](https://kubernetes.io/) environment. However, it cannot be regarded as mature because the project was initiated for and tested in that very specific environment only.
 
-# Installation
-## Prerequisites
-htppd-exporter is written in Perl. The following prerequisites apply:
+# Documentation
+[Main documentation is available here.](https://github.com/technicalguru/httpd-exporter/help/MAIN.md)
 
-* Perl V5.22 or higher (available at `/usr/bin/perl`)
-* Perl module [JSON](http://search.cpan.org/perldoc?JSON)
-* Perl module [JSON::XS](http://search.cpan.org/~mlehmann/JSON-XS-3.04/XS.pm)
-* Perl module [FindBin](https://perldoc.perl.org/FindBin.html)
-* Perl module [Cwd](https://perldoc.perl.org/Cwd.html)
-* Perl module [File::Basename](https://perldoc.perl.org/File/Basename.html)
-* Perl module [Sys::Hostname](https://perldoc.perl.org/Sys/Hostname.html)
-* Perl module [Socket](https://perldoc.perl.org/Socket.html)
+# How to use this image
 
-Most of these modules shall be already installed with a default Perl installation. Please follow the links above if this is not the case.
+* **Configuration File**
 
-## Downloading
-Install httpd-exporter by cloning the Git repository:
+httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. You need to copy/mount your configuration in directory `/etc/httpd-exporter` or provide the location via environment variable `HTTPD_EXPORTER_CONFIG_FILE`. See the [Configuration](https://github.com/technicalguru/httpd-exporter/help/CONFIGURATION.md) page for more details.
 
-> `git clone https://github.com/technicalguru/httpd-exporter`
+* **HTTPD Log Files**
 
-## Testing
-Test your installation by invoking:
+httpd-exporter scrapes log files. The configuration file must list all the locations where these log files are available. Make sure you mount your log files to be analyzed into the container at the right place. Please notice that - due to a Docker limitation - httpd-exporter requires to run as user root in order to have access to Docker container log files.
 
-> `<path-to-installation>/exporterd.pl --test`
+* **Metrics File**
 
-A successful test will produce an output similar to this:
-```
-1/12...OK
-2/12...OK
-3/12...OK
-4/12...OK
-5/12...OK
-6/12...OK
-7/12...OK
-8/12...OK
-9/12...OK
-10/12...OK
-11/12...OK
-12/12...OK
-Test Summary: 12 total, 0 failed, 12 passed
-```
+httpd-exporter does not serve the metrics itself but requires an additional HTTP server, such as nginx, Apache, Tomcat, et al. The metrics are written to the location as given in the configuration file, preferrably at `/var/www/html/metrics`. Therefore, it is required that httpd-exporter has this directory mounted and it is writable. The HTTP server must expose the metrics at this URL: http://&lt;your-server-name&gt;:9386/metrics. This is the reserved port for httpd-exporter.
 
-# Configuration
-httpd-exporter requires a configuration file describing the log files to scrape and the metrics to be produced. A default configuration file
-is part of the installation ([exporter.conf](examples/exporter.conf)) which you should install in directory `/etc/httpd-exporter`. Edit the file then to reflect
-your installation. 
-
-See the [Configuration](help/CONFIGURATION.md) page for more details.
-
-# Running
-## Invoking the httpd-exporter
-The following command invokes the httpd-exporter:
-
-> `<path-to-installation>/exporterd.pl`
-
-The httpd-exporter will try to find your configuration file in the following order:
-
-1. The path to the file was given as argument to the script (`exporterd.pl exporter.conf`).
-1. The path to the file is passed by environment variable `HTTPD_EXPORTER_CONFIG_FILE`.
-1. Default location is assumed: `/etc/httpd-exporter/exporter.conf`.
-
-httpd-exporter will fail to start when the file was not found or is not readable.
-
-## Exposing metrics
-Please notice that you will need an additional HTTPD product (Apache, nginx, ...) that needs to serve
-the metrics file produced by the httpd-exporter at the following URL:
-
-> http://&lt;your-host-name&gt;:9386/metrics
-
-## Linking Prometheus to metrics
+# Linking Prometheus to metrics
 Prometheus requires the following configuration to scrape the metrics:
 
 TBD
 
-## Docker image
-There is a [Docker](https://docker.io/) image available:
-
-> [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
-
-The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](contrib/kubernetes/exporter.yaml).
-Install it via:
+# Kubernetes Setup
+The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](https://github.com/technicalguru/httpd-exporter/contrib/kubernetes/exporter.yaml). It will automatically configure httpd-exporter for your cluster and provide an nginx container for serving the metrics. Install it via:
 
 ```
 kubectl apply -f https://github.com/technicalguru/httpd-exporter/contrib/kubernetes/exporter.yaml
@@ -139,7 +53,7 @@ The httpd-exporter exposes the following metrics:
  http_sent_bytes{"instance.hostname":"example.com","instance.ip":"10.0.0.10","method":"GET","status":"5xx"} 4375 1512397393
 ```
 
-Metrics are attributed with appropriate labels as defined by the [configuration file](help/CONFIGURATION.md). You might 
+Metrics are attributed with appropriate labels as defined by the [configuration file](https://github.com/technicalguru/httpd-exporter/help/CONFIGURATION.md). You might 
 require the following Prometheus expressions to query your HTTPD status:
 
 ```
@@ -147,14 +61,10 @@ delta(http_requests_total{status!="2xx"}[5m])  - returns number of requests in t
 sum(delta(http_requests_total{status!="2xx"}[5m])) - returns the total count of requests in the last 5 minutes that failed
 ```
 
-# Contribution
-
-Please contact @technicalguru if you want to contribute. Any improvement is highly welcome.
-
 # Further Readings
 
-* [Configuration](help/CONFIGURATION.md)
-* [Frequentyl Asked Questions](help/FAQ.md)
-* [DockerHub Image](https://hub.docker.com/r/technicalguru/httpd-exporter/)
+* [Documentation](https://github.com/technicalguru/httpd-exporter/help/MAIN.md)
+* [Configuration](https://github.com/technicalguru/httpd-exporter/help/CONFIGURATION.md)
+* [FAQ](https://github.com/technicalguru/httpd-exporter/help/FAQ.md)
 
 
