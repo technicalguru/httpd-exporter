@@ -119,7 +119,7 @@ The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is ava
 Install it via:
 
 ```
-kubectl apply -f https://github.com/technicalguru/httpd-exporter/contrib/kubernetes/exporter.yaml
+kubectl apply -f https://github.com/technicalguru/httpd-exporter/master/contrib/kubernetes/exporter.yaml
 ```
 
 # Metrics Exposed
