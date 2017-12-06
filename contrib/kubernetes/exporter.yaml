@@ -39,7 +39,6 @@ data:
 
     [/var/lib/docker/containers/*]
     type=kubernetes
-    labels={ "instance.ip" : "${HOSTIP}", "instance.hostname" : "${HOSTNAME}" }
 kind: ConfigMap
 metadata:
   name: httpd-exporter-config
