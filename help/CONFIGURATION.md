@@ -29,11 +29,11 @@ referrer}|-) (%{QS:agent}|-)
 
 [/var/log/apache2/access.log]
 type=httpd
-labels={ "instance.ip" : "${HOSTIP}", "instance.hostname" : "${HOSTNAME}" }
+labels={instance.ip="${HOSTIP}",instance.hostname="${HOSTNAME}"}
 
 [/var/lib/docker/containers/*]
 type=kubernetes
-labels={ "instance.ip" : "${HOSTIP}", "instance.hostname" : "${HOSTNAME}" }
+labels={instance.ip="${HOSTIP}",instance.hostname="${HOSTNAME}"}
 ```
 
 ## General Section
@@ -77,6 +77,6 @@ The following values can be configured:
 Key|Value|Required|Default|Description
 ---|-----|--------|-------|-----------
 type|`httpd` or `docker` or `kubernetes`|YES|-|Describing the type of the log file(s): Please notice that `docker` and `kubernetes` sections must match directories (usually at `/var/lib/docker/containers`, whereas `httpd` must match single log files.
-labels|JSON string|NO|-|JSON string of additional labels to be produced in metrics for this log file(s)
+labels|Label string|NO|-|Label string of additional labels to be produced in metrics for this log file(s)
 
 
