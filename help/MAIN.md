@@ -115,7 +115,7 @@ There is a [Docker](https://docker.io/) image available:
 
 > [https://hub.docker.com/r/technicalguru/httpd-exporter/](https://hub.docker.com/r/technicalguru/httpd-exporter/)
 
-The [Kubernetes](https://kubernetes.io/) YAML description for a DaemonSet is available [here](../contrib/kubernetes/exporter.yaml).
+The [Prometheus Operator](https://github.com/coreos/prometheus-operator) YAML for [Kubernetes](https://kubernetes.io/) is available [here](https://github.com/technicalguru/httpd-exporter/master/contrib/kubernetes/exporter.yaml).
 Install it via:
 
 ```
@@ -128,23 +128,23 @@ The httpd-exporter exposes the following metrics:
 ```
  # TYPE http_requests_total counter
  # HELP http_requests_total Counts the requests that were logged by HTTP daemon
- http_requests_total{method="GET",status="2xx"} 5432 1512397393
- http_requests_total{method="GET",status="4xx"} 32 1512397393
- http_requests_total{method="GET",status="5xx"} 5 1512397393
+ http_requests_total{method="GET",status="2xx"} 5432 1512397393000
+ http_requests_total{method="GET",status="4xx"} 32 1512397393000
+ http_requests_total{method="GET",status="5xx"} 5 1512397393000
 
  # TYPE http_sent_bytes counter
  # HELP http_sent_bytes Number of bytes transferred as logged by HTTP daemon
- http_sent_bytes{method="GET",status="2xx"} 235432 1512397393
- http_sent_bytes{method="GET",status="4xx"} 3782 1512397393
- http_sent_bytes{method="GET",status="5xx"} 4375 1512397393
+ http_sent_bytes{method="GET",status="2xx"} 235432 1512397393000
+ http_sent_bytes{method="GET",status="4xx"} 3782 1512397393000
+ http_sent_bytes{method="GET",status="5xx"} 4375 1512397393000
 ```
 
 Metrics are attributed with appropriate labels as defined by the [configuration file](CONFIGURATION.md). You might 
 require the following Prometheus expressions to query your HTTPD status:
 
 ```
-delta(http_requests_total{status!="2xx"}[5m])  - returns number of requests in the last 5 minutes for each label combination that were not successful
-sum(delta(http_requests_total{status!="2xx"}[5m])) - returns the total count of requests in the last 5 minutes that failed
+delta(http_requests_total{status!="200"}[5m])  - returns number of requests in the last 5 minutes for each label combination that were not successful
+sum(delta(http_requests_total{status!="200"}[5m])) - returns the total count of requests in the last 5 minutes that failed
 ```
 
 # Contribution

@@ -16,7 +16,7 @@ addLabels=method
 addStatusGroupLabel=status
 collectBytesTransferred=bytes_sent
 retentionSeconds=3600
-deadLabels=method,status
+deadLabels=method,status,kubernetes_namespace_name
 
 [LogFormats]
 # Format used mostly in reverse proxy installations
@@ -29,11 +29,11 @@ referrer}|-) (%{QS:agent}|-)
 
 [/var/log/apache2/access.log]
 type=httpd
-labels={instance.ip="${HOSTIP}",instance.hostname="${HOSTNAME}"}
+labels={instance_ip="${HOSTIP}",instance_hostname="${HOSTNAME}"}
 
 [/var/lib/docker/containers/*]
 type=kubernetes
-labels={instance.ip="${HOSTIP}",instance.hostname="${HOSTNAME}"}
+labels={instance_ip="${HOSTIP}",instance_hostname="${HOSTNAME}"}
 ```
 
 ## General Section
@@ -43,7 +43,7 @@ Key|Value|Required|Default|Description
 ---|-----|--------|-------|-----------
 metricsFile|&lt;path&gt;|YES|-|The path to the file where metrics will be stored and served by your HTTPD product. Usually `/var/www/html/metrics`.
 addLabels|&lt;name-of-variable&gt;|NO|-|Add a label based on the variable of the given name(s) - comma-separated list.
-addStatusGroupLabel|&lt;name-of-variable&gt;|NO|-|Group metrics by the HTTP status code which is given by the variable of the given name.
+addStatusGroupLabel|&lt;name-of-variable&gt;|NO|-|Group metrics by the HTTP status code which is given by the variable of the given name (1xx, 2xx, 3xx etc). If this config value is omitted then status values will be recorded for each individual status. You will be required to add the variable name (usually "status") to "addLabels" key.
 collectBytesTransferred|&lt;name-of-variable&gt;|NO|-|Add a http_sent_bytes metrics and add up the values of the variable of the given name.
 retentionSeconds|&lt;seconds&gt;|NO|3600|Regard metrics that were not updated within that period of time to be expired (dead) and remove them.
 deadLabels|&lt;list-of-labels&gt;|NO|-|Use these labels for dead metrics. Expired metrics will be added up to the respective dead label value.
