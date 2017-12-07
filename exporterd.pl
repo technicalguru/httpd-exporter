@@ -4,8 +4,6 @@ use warnings;
 use FindBin;
 use Cwd            qw( abs_path );
 use File::Basename qw( dirname );
-use JSON;
-use JSON::XS;
 use Sys::Hostname;
 use Socket;
 

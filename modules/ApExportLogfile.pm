@@ -1,6 +1,7 @@
 package ApExportLogfile;
 use strict;
 use warnings;
+use ApExportMetrics;
 use Fcntl;
 use JSON;
 use JSON::XS;
@@ -122,7 +123,7 @@ sub computeLabels {
 
 	# Replace variables now
 	if (exists($self->{config}->{labels})) {
-		my $labelDef = from_json($self->{config}->{labels});
+		my $labelDef = ApExportMetrics::from_label_string($self->{config}->{labels});
 		my $key;
 		foreach $key (keys(%{$labelDef})) {
 			my $valueDef = $labelDef->{$key};
