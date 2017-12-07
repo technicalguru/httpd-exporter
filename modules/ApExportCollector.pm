@@ -28,19 +28,17 @@ sub load {
 			# Ignore some lines
 			next if $line =~ /^\s*$/;
 
-			if ($line =~ /^# HELP ([-_\.A-Za-z0-9]+) (.*)/) {
+			if ($line =~ /^#\s+HELP\s+([^\s]+)\s+(.*)/) {
 				my $metrics = $1;
 				my $help    = $2;
 				my $m = $self->getOrCreateMetrics($metrics);
 				$m->setHelp($help);
-			} elsif ($line =~ /^# TYPE ([-_\.A-Za-z0-9]+) ([A-Za-z]+)/) {
+			} elsif ($line =~ /^#\s+TYPE\s+([^\s]+)\s+([A-Za-z]+)/) {
 				my $metrics = $1;
 				my $type   = $2;
 				my $m = $self->getOrCreateMetrics($metrics);
 				$m->setType($type);
-			} else {
-				# We ignore the optional timestamp at the end - it has no meaning for us
-				$line =~ /^\s*([-_\.A-Za-z0-9]+)(\{\s*([^=]+\s*=\s*"[^"]+")(\s*,\s*[^=]+\s*=\s*"[^"]+")*\s*\})?\s+(\d+(\.\d+)?)\s+(\d+)?/;
+			} elsif ($line =~ /^\s*([-_\.A-Za-z0-9\{\}]+)(\{\s*([^=]+\s*=\s*"[^"]+")(\s*,\s*[^=]+\s*=\s*"[^"]+")*\s*\})?\s+(\d+(\.\d+)?)\s+(\d+)?/) {
 				my $metrics   = $1;
 				my $labels    = $2;
 				my $value     = $5;

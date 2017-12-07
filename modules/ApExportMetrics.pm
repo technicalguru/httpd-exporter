@@ -67,7 +67,9 @@ sub standardLabels {
 		foreach $key (sort(keys(%{$labels}))) {
 			push(@OUT, $key.'="'.$labels->{$key}.'"');
 		}
-		return '{'.join(',', @OUT).'}';
+		if (scalar(@OUT)) {
+			return '{'.join(',', @OUT).'}';
+		}
 	}
 	return '';
 }
