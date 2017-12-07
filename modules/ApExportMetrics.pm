@@ -114,7 +114,7 @@ sub set {
 	my $labels    = shift;
 	my $timestamp = shift;
 	$labels       = $self->standardLabels($labels);
-	$timestamp    = time() if !defined($timestamp);
+	$timestamp    = time()*1000 if !defined($timestamp);
 
 	if ($labels) {
 		$self->{values}->{$labels}     = $value;
@@ -133,7 +133,7 @@ sub inc {
 	my $labels    = shift;
 	my $timestamp = shift;
 	$labels       = $self->standardLabels($labels);
-	$timestamp    = time() if !defined($timestamp);
+	$timestamp    = time()*1000 if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -160,7 +160,7 @@ sub dec {
 	my $labels    = shift;
 	my $timestamp = shift;
 	$labels       = $self->standardLabels($labels);
-	$timestamp    = time() if !defined($timestamp);
+	$timestamp    = time()*1000 if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -189,7 +189,7 @@ sub add {
 	my $labels    = shift;
 	my $timestamp = shift;
 	$labels       = $self->standardLabels($labels);
-	$timestamp    = time() if !defined($timestamp);
+	$timestamp    = time()*1000 if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -218,7 +218,7 @@ sub sub {
 	my $labels    = shift;
 	my $timestamp = shift;
 	$labels       = $self->standardLabels($labels);
-	$timestamp    = time() if !defined($timestamp);
+	$timestamp    = time()*1000 if !defined($timestamp);
 
 	if ($labels) {
 		if (exists($self->{values}->{$labels})) {
@@ -261,7 +261,7 @@ sub getDeadLabel {
 # Arguments: (none)
 sub checkRentention {
 	my $self = shift;
-	my $now  = time();
+	my $now  = time()*1000; # ms
 
 	if ($self->getLabels()) {
 		my $label;
@@ -269,7 +269,7 @@ sub checkRentention {
 			# ignore dead labels!
 			next if $label =~ /"deadCounter":"true"/;
 			my $timestamp = $self->{timestamps}->{$label};
-			if ($now - $timestamp > $self->{retentionSeconds}) {
+			if ($now - $timestamp > $self->{retentionSeconds}*1000) {
 				$self->add($self->{values}->{$label}, $self->getDeadLabel($label));
 				delete($self->{values}->{$label});
 				delete($self->{timestamps}->{$label});

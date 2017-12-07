@@ -44,8 +44,11 @@ sub new {
 # Arguments: (none)
 sub getSize {
 	my $self = shift;
-	my @RC = stat($self->{logfile});
-	return $RC[7];
+	if (-f $self->{logfile}) {
+		my @RC = stat($self->{logfile});
+		return $RC[7];
+	}
+	return 0;
 }
 
 # Closes the file for reading.
@@ -75,7 +78,7 @@ sub getNewLines {
 	my $time = sprintf("%04d-%02d-%02dT%02d:%02d:%02dZ", $T[5]+1900, $T[4]+1, $T[3], $T[2], $T[1], $T[0]);
 
 	# When size of file changed
-	if ($self->{size} != $curSize) {
+	if (-f $self->{logfile} && ($self->{size} != $curSize)) {
 		# Open the file
 		my $fh;
 		if (open($fh, '<'.$self->{logfile})) {
