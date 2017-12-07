@@ -2,7 +2,8 @@
 [Prometheus](https://prometheus.io/) Metrics exporter for HTTP daemons (Apache, nginx, ...) based on access log file scraping.
 
 # Supported Tags
-* `current` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/blob/master/build/Dockerfile)) - latest (unstable) development image
+* `current` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/blob/master/build/Dockerfile)) - latest (unstable) image
+* `v1.0.0-rc1` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/blob/v1.0.0-rc1/build/Dockerfile)) - Release Candidate
 
 # Status
 httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernetes](https://kubernetes.io/) environment. However, it cannot be regarded as mature because the project was initiated for and tested in that very specific environment only.
@@ -53,12 +54,11 @@ The httpd-exporter exposes the following metrics:
  http_sent_bytes{method="GET",status="5xx"} 4375 1512397393000
 ```
 
-Metrics are attributed with appropriate labels as defined by the [configuration file](https://github.com/technicalguru/httpd-exporter/blob/master/help/CONFIGURATION.md). You might 
-require the following Prometheus expressions to query your HTTPD status:
+Metrics are attributed with appropriate labels as defined by the [configuration file](https://github.com/technicalguru/httpd-exporter/blob/master/help/CONFIGURATION.md). You might require the following Prometheus expressions to query your HTTPD status:
 
 ```
-delta(http_requests_total{status!="200"}[5m])  - returns number of requests in the last 5 minutes for each label combination that were not successful
-sum(delta(http_requests_total{status!="200"}[5m])) - returns the total count of requests in the last 5 minutes that failed
+increase(http_requests_total{status!="200"}[5m])  - returns number of requests in the last 5 minutes for each label combination that were not successful
+sum(increase(http_requests_total{status!="200"}[5m])) - returns the total count of requests in the last 5 minutes that failed
 ```
 
 # Further Readings
