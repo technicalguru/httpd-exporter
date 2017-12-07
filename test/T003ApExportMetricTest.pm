@@ -20,9 +20,9 @@ sub execute {
 	my $self = shift;
 
 	my $m = new ApExportMetrics('test_metric');
-	$m->inc('{"environment":"test"}');
-	$m->inc('{"environment":"dev"}');
-	$m->inc('{"hostname":"localhost"}');
+	$m->inc('{environment="test"}');
+	$m->inc('{environment="dev"}');
+	$m->inc('{hostname="localhost"}');
 	my @L = $m->getLabels();
 	if (scalar(@L) != 3) {
 		return "#getLabels() failed (expected: 3, actual: ".scalar(@L).")";

@@ -20,9 +20,9 @@ sub execute {
 	my $self = shift;
 
 	my $m = new ApExportMetrics('test_metric');
-	$m->inc('{"environment":"test"}');
-	$m->inc('{"environment":"dev"}');
-	$m->inc('{"hostname":"localhost"}');
+	$m->inc('{environment="test"}');
+	$m->inc('{environment="dev"}');
+	$m->inc('{hostname="localhost"}');
 	my $actual = $m->get();
 	if ($actual != 0) {
 		return "#get() failed (expected: 0, actual $actual)";

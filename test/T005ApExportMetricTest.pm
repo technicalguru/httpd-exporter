@@ -20,12 +20,12 @@ sub execute {
 	my $self = shift;
 
 	my $m = new ApExportMetrics('test_metric');
-	$m->inc('{"environment":"test"}');
-	$m->inc('{"environment":"dev"}');
-	$m->inc('{"hostname":"localhost"}');
+	$m->inc('{environment="test"}');
+	$m->inc('{environment="dev"}');
+	$m->inc('{hostname="localhost"}');
 	my @L = $m->getLabels();
-	if (!grep(/^\{"environment":"dev"\}$/, @L)) {
-		return "#getLabels() failed (expected: '{\"environment\":\"dev\"}, actual: NULL)";
+	if (!grep(/^\{environment="dev"\}$/, @L)) {
+		return "#getLabels() failed (expected: '{environment=\"dev\"}, actual: NULL)";
 	}
 	return 0;
 }

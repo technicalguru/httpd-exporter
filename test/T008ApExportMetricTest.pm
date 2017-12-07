@@ -20,9 +20,9 @@ sub execute {
 	my $self = shift;
 
 	my $m = new ApExportMetrics('test_metric');
-	$m->inc('{"environment":"test"}');
-	$m->inc('{"environment":"dev"}');
-	$m->inc('{"hostname":"localhost"}');
+	$m->inc('{environment="test"}');
+	$m->inc('{environment="dev"}');
+	$m->inc('{hostname="localhost"}');
 	$m->set(1000);
 	my $actual = $m->get();
 	if ($actual != 1000) {

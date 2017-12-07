@@ -20,8 +20,8 @@ sub execute {
 	my $self = shift;
 
 	my $m = new ApExportMetrics('test_metric');
-	$m->inc('{"environment":"test"}');
-	my $actual = $m->get('{"environment":"test"}');
+	$m->inc('{environment="test"}');
+	my $actual = $m->get('{environment="test"}');
 	if ($actual != 1) {
 		return "#inc(String) failed (expected: 1, actual: $actual)";
 	}

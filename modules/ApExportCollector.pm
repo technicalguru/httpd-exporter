@@ -40,7 +40,7 @@ sub load {
 				$m->setType($type);
 			} else {
 				# We ignore the optional timestamp at the end - it has no meaning for us
-				$line =~ /^\s*([-_\.A-Za-z0-9]+)(\{\s*("[^"]+"\s*:\s*"[^"]+")(\s*,\s*"[^"]+"\s*:\s*"[^"]+")*\s*\})?\s+(\d+(\.\d+)?)\s+(\d+)?/;
+				$line =~ /^\s*([-_\.A-Za-z0-9]+)(\{\s*([^=]+\s*=\s*"[^"]+")(\s*,\s*[^=]+\s*=\s*"[^"]+")*\s*\})?\s+(\d+(\.\d+)?)\s+(\d+)?/;
 				my $metrics   = $1;
 				my $labels    = $2;
 				my $value     = $5;
@@ -94,12 +94,13 @@ sub save {
 	my $format = shift;
 	my $name;
 
-	if (open(FOUT, '>'.$self->{metricsFile})) {
+	if (open(FOUT, '>'.$self->{metricsFile}.'.part')) {
 		foreach $name (keys(%{$self->{metrics}})) {
 			my $metric = $self->{metrics}->{$name};
 			print FOUT $metric->getExposure($format)."\n";
 		}
 		close(FOUT);
+		rename($self->{metricsFile}.'.part', $self->{metricsFile});
 	} else {
 		print STDERR "Cannot save metrics: ".$self->{metricsFile}."\n";
 	}

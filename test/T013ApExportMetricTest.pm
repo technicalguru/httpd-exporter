@@ -21,9 +21,9 @@ sub execute {
 
 	my $m = new ApExportMetrics('test_metric');
 	$m->addDeadLabel('status');
-	my $actual = $m->getDeadLabel('{"environment":"test","status":"2xx"}');
-	if ($actual ne '{"deadCounter":"true","status":"2xx"}') {
-		return "#getDeadLabel() failed (expected: '{\"deadCounter\":\"true\",\"status\":\"2xx\"}', actual: $actual)";
+	my $actual = $m->getDeadLabel('{environment="test",status="2xx"}');
+	if ($actual ne '{deadCounter="true",status="2xx"}') {
+		return "#getDeadLabel() failed (expected: '{deadCounter=\"true\",status=\"2xx\"}', actual: $actual)";
 	}
 	return 0;
 }

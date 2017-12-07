@@ -55,21 +55,17 @@ sub setRetentionSeconds {
 }
 
 # standardizes the labels given for storing in this metric
+# Arguments: $in - labels (either hashref or string)
 sub standardLabels {
 	my $self  = shift; 
 	my $in    = shift;
 
 	if ($in) {
-		my $labels = ref($in) ? $in : from_json($in);
+		my $labels = ref($in) ? $in : from_label_string($in);
 		my @OUT = ();
 		my $key;
-		my $coder = JSON::XS->new->ascii->pretty->allow_nonref;
 		foreach $key (sort(keys(%{$labels}))) {
-			my $k = $coder->encode($key);
-			my $v = $coder->encode($labels->{$key});
-			chomp $k;
-			chomp $v;
-			push(@OUT, $k.':'.$v);
+			push(@OUT, $key.'="'.$labels->{$key}.'"');
 		}
 		return '{'.join(',', @OUT).'}';
 	}
@@ -77,7 +73,7 @@ sub standardLabels {
 }
 
 # Gets the value for this metric.
-# Arguments: $labels - JSON-encoded map of labels
+# Arguments: $labels - string-encoded map of labels
 sub get {
 	my $self   = shift; 
 	my $labels = shift;
@@ -108,7 +104,7 @@ sub getLabels {
 
 # Sets the value for this metric
 # Arguments: $value     - the value
-#            $labels    - JSON-encoded map of labels
+#            $labels    - string-encoded map of labels
 #            $timestamp - timestamp of this value (optional)
 sub set {
 	my $self      = shift; 
@@ -128,7 +124,7 @@ sub set {
 }
 
 # Increases the value for this metric
-# Arguments: $labels - JSON-encoded map of labels
+# Arguments: $labels - string-encoded map of labels
 #            $timestamp - timestamp of this value (optional)
 sub inc {
 	my $self      = shift; 
@@ -155,7 +151,7 @@ sub inc {
 }
 
 # Decreases the value for this metric
-# Arguments: $labels - JSON-encoded map of labels
+# Arguments: $labels - string-encoded map of labels
 #            $timestamp - timestamp of this value (optional)
 sub dec {
 	my $self      = shift; 
@@ -183,7 +179,7 @@ sub dec {
 
 # Adds the value for this metric.
 # Arguments: $value  - the value to add
-#            $labels - JSON-encoded map of labels
+#            $labels - string-encoded map of labels
 #            $timestamp - timestamp of this value (optional)
 sub add {
 	my $self      = shift;
@@ -212,7 +208,7 @@ sub add {
 
 # Subtracts the value for this metric.
 # Arguments: $value  - the value to subtract
-#            $labels - JSON-encoded map of labels
+#            $labels - string-encoded map of labels
 #            $timestamp - timestamp of this value (optional)
 sub sub {
 	my $self      = shift;
@@ -244,7 +240,7 @@ sub sub {
 # Returns: the dead label string
 sub getDeadLabel {
 	my $self   = shift;
-	my $labels = from_json(shift);
+	my $labels = from_label_string(shift);
 	my $rc     = {};
 
 	my $key;
@@ -317,7 +313,7 @@ sub from_label_string {
 	my $s  = shift;
 	my $rc = {};
 
-	while ($s =~ /([^\{\},\s=]+)="([^"\{\}]*)"/g) {
+	while ($s =~ /([^\{\},\s=]+)\s*=\s*"([^"\{\}]*)"/g) {
 		my $key = $1;
 		my $val = $2;
 		$rc->{$key} = $val;
