@@ -202,18 +202,21 @@ sub computeStandardDockerLabels {
 	my $self   = shift;
 	my $config = shift;
 
-	$self->{labels}->{'docker.container.name'}     = $config->{Name};
-#	$self->{labels}->{'docker.state.running'}      = $config->{State}->{Running};
-#	$self->{labels}->{'docker.state.paused'}       = $config->{State}->{Paused};
-#	$self->{labels}->{'docker.state.dead'}         = $config->{State}->{Dead};
-	$self->{labels}->{'docker.container.hostname'} = $config->{Config}->{Hostname};
+	$self->{labels}->{'docker_container_name'}     = $config->{Name};
+#	$self->{labels}->{'docker_state_running'}      = $config->{State}->{Running};
+#	$self->{labels}->{'docker_state_paused'}       = $config->{State}->{Paused};
+#	$self->{labels}->{'docker_state_dead'}         = $config->{State}->{Dead};
+	$self->{labels}->{'docker_container_hostname'} = $config->{Config}->{Hostname};
 
 	# Add all user labels
 	if (exists($config->{Config}->{Labels})) {
 		my $key;
 		foreach $key (keys(%{$config->{Config}->{Labels}})) {
 			if (($key !~ /^annotation\./) && ($key !~ /^io\.kubernetes/) && ($key !~ /^com\.docker/)) {
-				$self->{labels}->{$key} = $config->{Config}->{Labels}->{$key};
+				my $k = $key;
+				$k =~ s/[^a-zA-Z0-9_]/_/g;
+				$k =~ s/__*/_/g;
+				$self->{labels}->{$k} = $config->{Config}->{Labels}->{$key};
 			}
 		}
 	}
@@ -243,11 +246,11 @@ sub computeKubernetesLabels {
 	$self->computeStandardDockerLabels($config);
 
 	# Kubernetes specific labels
-	$self->{labels}->{'kubernetes.container.name'} = $config->{Config}->{Labels}->{'io.kubernetes.container.name'};
-	$self->{labels}->{'kubernetes.container.type'} = $config->{Config}->{Labels}->{'io.kubernetes.docker.type'};
-	$self->{labels}->{'kubernetes.namespace.name'} = $config->{Config}->{Labels}->{'io.kubernetes.pod.namespace'};
-	$self->{labels}->{'kubernetes.pod.name'}       = $config->{Config}->{Labels}->{'io.kubernetes.pod.name'};
-	$self->{labels}->{'kubernetes.pod.uid'}        = $config->{Config}->{Labels}->{'io.kubernetes.pod.uid'};
+	$self->{labels}->{'kubernetes_container_name'} = $config->{Config}->{Labels}->{'io.kubernetes.container.name'};
+	$self->{labels}->{'kubernetes_container_type'} = $config->{Config}->{Labels}->{'io.kubernetes.docker.type'};
+	$self->{labels}->{'kubernetes_namespace_name'} = $config->{Config}->{Labels}->{'io.kubernetes.pod.namespace'};
+	$self->{labels}->{'kubernetes_pod_name'}       = $config->{Config}->{Labels}->{'io.kubernetes.pod.name'};
+	$self->{labels}->{'kubernetes_pod_uid'}        = $config->{Config}->{Labels}->{'io.kubernetes.pod.uid'};
 }
 
 1;

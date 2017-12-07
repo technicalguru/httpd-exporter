@@ -28,17 +28,17 @@ sub load {
 			# Ignore some lines
 			next if $line =~ /^\s*$/;
 
-			if ($line =~ /^#\s+HELP\s+([^\s]+)\s+(.*)/) {
+			if ($line =~ /^#\s+HELP\s+([0-9a-zA-Z_:]+)\s+(.*)/) {
 				my $metrics = $1;
 				my $help    = $2;
 				my $m = $self->getOrCreateMetrics($metrics);
 				$m->setHelp($help);
-			} elsif ($line =~ /^#\s+TYPE\s+([^\s]+)\s+([A-Za-z]+)/) {
+			} elsif ($line =~ /^#\s+TYPE\s+([0-9a-zA-Z_:]+)\s+([A-Za-z]+)/) {
 				my $metrics = $1;
 				my $type   = $2;
 				my $m = $self->getOrCreateMetrics($metrics);
 				$m->setType($type);
-			} elsif ($line =~ /^\s*([-_\.A-Za-z0-9\{\}]+)(\{\s*([^=]+\s*=\s*"[^"]+")(\s*,\s*[^=]+\s*=\s*"[^"]+")*\s*\})?\s+(\d+(\.\d+)?)\s+(\d+)?/) {
+			} elsif ($line =~ /^\s*([0-9a-zA-Z_:]+)(\{\s*([a-zA-Z0-9_]+\s*=\s*"[^"]+")(\s*,\s*[a-zA-Z0-9_]+\s*=\s*"[^"]+")*\s*\})?\s+(\d+(\.\d+)?)\s+(\d+)?/) {
 				my $metrics   = $1;
 				my $labels    = $2;
 				my $value     = $5;
