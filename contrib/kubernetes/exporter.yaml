@@ -27,11 +27,10 @@ data:
   exporter.conf: |
     [General]
     metricsFile=/var/www/html/metrics
-    addLabels=method
-    addStatusGroupLabel=status
+    addLabels=method,status
     collectBytesTransferred=bytes_sent
     retentionSeconds=3600
-    deadLabels=method,status
+    deadLabels=method,status,kubernetes_namespace_name
 
     [LogFormats]
     %{HOSTNAME:hostname}(:%{INT:port})? %{IP:clientip} %{NOTSPACE:rlogname} %{NOTSPACE:user} \[%{HTTPDATE:timestamp}\] "%{REQUEST_LINE}" %{INT:status} %{INT:bytes_sent} (%{QS:referrer}|-) (%{QS:agent}|-)
