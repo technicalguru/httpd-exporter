@@ -16,6 +16,7 @@ addLabels=method
 addStatusGroupLabel=status
 collectBytesTransferred=bytes_sent
 retentionSeconds=3600
+enableDeadLabels=1
 deadLabels=method,status,kubernetes_namespace_name
 
 [LogFormats]
@@ -46,6 +47,7 @@ addLabels|&lt;name-of-variable&gt;|NO|-|Add a label based on the variable of the
 addStatusGroupLabel|&lt;name-of-variable&gt;|NO|-|Group metrics by the HTTP status code which is given by the variable of the given name (1xx, 2xx, 3xx etc). If this config value is omitted then status values will be recorded for each individual status. You will be required to add the variable name (usually "status") to "addLabels" key.
 collectBytesTransferred|&lt;name-of-variable&gt;|NO|-|Add a http_sent_bytes metrics and add up the values of the variable of the given name.
 retentionSeconds|&lt;seconds&gt;|NO|3600|Regard metrics that were not updated within that period of time to be expired (dead) and remove them.
+enableDeadLabels|1/0|NO|1|Enables the usage of dead metrics. If set to 0 then dead counters will be deleted after retention period.
 deadLabels|&lt;list-of-labels&gt;|NO|-|Use these labels for dead metrics. Expired metrics will be added up to the respective dead label value.
 
 ## LogFormats Section

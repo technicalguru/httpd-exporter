@@ -37,14 +37,20 @@ sub new {
 	my @METRICS = ();
 	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_requests_total', 'Counter', 'Counts the requests that were logged by HTTP daemon'));
 	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_sent_bytes', 'Counter', 'Number of bytes transferred as logged by HTTP daemon'));
-	my $label;
-	foreach $label (split(',', $self->{config}->getGeneral('deadLabels'))) {
-		my $m;
-		foreach $m (@METRICS) {
-			$m->addDeadLabel($label);
-			$m->setRetentionSeconds($self->{config}->getGeneral('retentionSeconds'));
+	my $m;
+	my $enabled = $self->{config}->getGeneral('enableDeadLabels');
+	$enabled = 1 if undef($enabled);
+	foreach $m (@METRICS) {
+		$m->setDeadLabelsEnabled($enabled);
+		if ($enabled) {
+			my $label;
+			foreach $label (split(',', $self->{config}->getGeneral('deadLabels'))) {
+				$m->addDeadLabel($label);
+				$m->setRetentionSeconds($self->{config}->getGeneral('retentionSeconds'));
+			}
 		}
 	}
+
 	return $rc;
 }
 
@@ -233,12 +239,17 @@ sub collectBytesSentMetrics {
 	my $vars   = shift;
 	my $rc     = 0;
 
+	$self->ensureZeroCounter($labels);
+
 	# Add metric bytes_transferred_total
 	my $sentBytesVar = $self->{config}->getGeneral('collectBytesTransferred');
 	if (defined($sentBytesVar) && exists($vars->{$sentBytesVar})) {
 		my $metrics = $self->{collector}->getMetrics('http_sent_bytes');
 		$metrics->add($vars->{$sentBytesVar}, $labels);
 		$rc = 1;
+
+		# Make sure we have zero counts as required
+		$self->ensureZeroCounters($metrics, $labels);
 	}
 
 	return $rc;
@@ -256,7 +267,19 @@ sub collectRequestsMetrics {
 	# Increase metric requests_total
 	my $metrics = $self->{collector}->getMetrics('http_requests_total');
 	$metrics->inc($labels);
+
+	# Make sure we have zero counts as required
+	$self->ensureZeroCounters($metrics, $labels);
 	return 1;
+}
+
+# Ensures that the given metrics has a 0-counter for all non-existant time series.
+# Arguments: $metrics - the metrics to be checked
+#            $labels  - a set of labels where variants need to be ignored.
+sub ensureZeroCounter {
+	my $self    = shift;
+	my $metrics = shift;
+	my $labels  = shift;
 }
 
 # Compute the statusGroup label value.

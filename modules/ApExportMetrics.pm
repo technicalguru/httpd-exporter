@@ -13,6 +13,7 @@ sub new {
 		'values'     => {},
 		'timestamps' => {},
 		'deadLabels' => [],
+		'enableDeadLabels' => 1,
 		'retentionSeconds' => 3600,
 	};
 	return bless $self, $class;
@@ -32,6 +33,14 @@ sub setType {
 	my $self  = shift; 
 	my $type  = shift;
 	$self->{type} = $type;
+}
+
+# Enables/Disabled dead label usage
+# Arguments: $bool - 1/0 to enable/diable
+sub setDeadLabelsEnabled {
+	my $self  = shift; 
+	my $bool  = shift;
+	$self->{enableDeadLabels} = $bool;
 }
 
 # Adds a label to be used for dead series
@@ -267,10 +276,19 @@ sub checkRentention {
 		my $label;
 		foreach $label ($self->getLabels()) {
 			# ignore dead labels!
-			next if $label =~ /"deadCounter":"true"/;
+			if ($label =~ /"deadCounter":"true"/) {
+				if (!($self->{enableDeadLabels})) {
+					# Delete them
+					delete($self->{values}->{$label});
+					delete($self->{timestamps}->{$label});
+				}
+				next;
+			}
 			my $timestamp = $self->{timestamps}->{$label};
 			if ($now - $timestamp > $self->{retentionSeconds}*1000) {
-				$self->add($self->{values}->{$label}, $self->getDeadLabel($label));
+				if ($self->{enableDeadLabels}) {
+					$self->add($self->{values}->{$label}, $self->getDeadLabel($label));
+				}
 				delete($self->{values}->{$label});
 				delete($self->{timestamps}->{$label});
 			}
