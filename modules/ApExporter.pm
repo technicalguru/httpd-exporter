@@ -239,8 +239,6 @@ sub collectBytesSentMetrics {
 	my $vars   = shift;
 	my $rc     = 0;
 
-	$self->ensureZeroCounter($labels);
-
 	# Add metric bytes_transferred_total
 	my $sentBytesVar = $self->{config}->getGeneral('collectBytesTransferred');
 	if (defined($sentBytesVar) && exists($vars->{$sentBytesVar})) {
@@ -248,8 +246,6 @@ sub collectBytesSentMetrics {
 		$metrics->add($vars->{$sentBytesVar}, $labels);
 		$rc = 1;
 
-		# Make sure we have zero counts as required
-		$self->ensureZeroCounters($metrics, $labels);
 	}
 
 	return $rc;
@@ -268,18 +264,7 @@ sub collectRequestsMetrics {
 	my $metrics = $self->{collector}->getMetrics('http_requests_total');
 	$metrics->inc($labels);
 
-	# Make sure we have zero counts as required
-	$self->ensureZeroCounters($metrics, $labels);
 	return 1;
-}
-
-# Ensures that the given metrics has a 0-counter for all non-existant time series.
-# Arguments: $metrics - the metrics to be checked
-#            $labels  - a set of labels where variants need to be ignored.
-sub ensureZeroCounter {
-	my $self    = shift;
-	my $metrics = shift;
-	my $labels  = shift;
 }
 
 # Compute the statusGroup label value.

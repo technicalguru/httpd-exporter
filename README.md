@@ -3,7 +3,7 @@
 
 # Supported Tags
 * `current` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/blob/master/build/Dockerfile)) - latest (unstable) image
-* `v1.0.0-rc2` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/blob/v1.0.0-rc2/build/Dockerfile)) - Release Candidate
+* `v1.0.0-rc3` ([Dockerfile](https://github.com/technicalguru/httpd-exporter/blob/v1.0.0-rc3/build/Dockerfile)) - Release Candidate
 
 # Status
 httpd-exporter is in Beta phase. It is running stable in a commercial [Kubernetes](https://kubernetes.io/) environment. However, it cannot be regarded as mature because the project was initiated for and tested in that very specific environment only.
