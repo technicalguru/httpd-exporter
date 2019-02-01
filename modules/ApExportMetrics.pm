@@ -246,6 +246,7 @@ sub sub {
 	}
 }
 
+# DEPRECATE?: Never remove values
 # Compute the dead label from the given label string.
 # Arguments: $labels - labels to be transformed
 # Returns: the dead label string
@@ -265,10 +266,11 @@ sub getDeadLabel {
 	return $self->standardLabels($rc);
 }
 
+# DEPRECATE?: Never remove values
 # Checks the retention of all values and moves those series to dead values.
 # This is required to ensure that sum() queries in Prometheus always go up.
 # Arguments: (none)
-sub checkRentention {
+sub checkRetention {
 	my $self = shift;
 	my $now  = time()*1000; # ms
 
@@ -304,7 +306,8 @@ sub getExposure {
 	my ($rc, $label, $time);
 	$rc   = '';
 
-	$self->checkRentention();
+	# DEPRECATE?: Never remove values
+	$self->checkRetention();
 
 	if ($self->getLabels() || exists($self->{value})) {
 		# print TYPE
