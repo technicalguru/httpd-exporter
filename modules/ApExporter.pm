@@ -35,8 +35,8 @@ sub new {
 	my $rc = bless $self, $class;
 	# Create two metrics and tell them the dead labels
 	my @METRICS = ();
-	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_requests_total', 'Counter', 'Counts the requests that were logged by HTTP daemon'));
-	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_sent_bytes', 'Counter', 'Number of bytes transferred as logged by HTTP daemon'));
+	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_requests_total', 'counter', 'Counts the requests that were logged by HTTP daemon'));
+	push(@METRICS, $rc->{collector}->getOrCreateMetrics('http_sent_bytes', 'counter', 'Number of bytes transferred as logged by HTTP daemon'));
 	my $m;
 	my $enabled = $self->{config}->getGeneral('enableDeadLabels');
 	$enabled = 1 if undef($enabled);
