@@ -22,14 +22,14 @@ sub execute {
 	my $m = new ApExportMetrics('test_metric');
 	$m->addDeadLabel('status');
 	$m->set(3000, '{environment="test",status="2xx"}', 0);
-	$m->checkRentention();
+	$m->checkRetention();
 	my $actual = $m->get('{environment="test",status="2xx"}');
 	if ($actual != 0) {
-		return "#checkRentention() failed (expected: 0, actual: $actual)";
+		return "#checkRetention() failed (expected: 0, actual: $actual)";
 	}
 	$actual = $m->get('{deadCounter="true",status="2xx"}');
 	if ($actual != 3000) {
-		return "#checkRentention() failed (expected: 3000, actual: $actual)";
+		return "#checkRetention() failed (expected: 3000, actual: $actual)";
 	}
 	return 0;
 }
