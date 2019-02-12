@@ -266,7 +266,7 @@ sub getDeadLabel {
 	return $self->standardLabels($rc);
 }
 
-# DEPRECATE?: Never remove values
+# DEPRECATED: Never remove values
 # Checks the retention of all values and moves those series to dead values.
 # This is required to ensure that sum() queries in Prometheus always go up.
 # Arguments: (none)
@@ -306,8 +306,8 @@ sub getExposure {
 	my ($rc, $label, $time);
 	$rc   = '';
 
-	# DEPRECATE?: Never remove values
-	$self->checkRetention();
+	# DEPRECATED: Never remove values
+	#$self->checkRetention();
 
 	if ($self->getLabels() || exists($self->{value})) {
 		# print TYPE
@@ -320,11 +320,15 @@ sub getExposure {
 		}
 		# print simple value
 		if (exists($self->{value})) {
-			$rc .= $self->{name}.' '.$self->{value}.' '.$self->{timestamp}."\n";
+			# DEPRECATED: No timestamps anymore
+			# $rc .= $self->{name}.' '.$self->{value}.' '.$self->{timestamp}."\n";
+			$rc .= $self->{name}.' '.$self->{value}."\n";
 		}
 		# print labelled values
 		foreach $label ($self->getLabels()) {
-			$rc .= $self->{name}.$label.' '.$self->get($label).' '.$self->{timestamps}->{$label}."\n";
+			# DEPRECATED: No timestamps anymore
+			# $rc .= $self->{name}.$label.' '.$self->get($label).' '.$self->{timestamps}->{$label}."\n";
+			$rc .= $self->{name}.$label.' '.$self->get($label)."\n";
 		}
 	}
 	return $rc;

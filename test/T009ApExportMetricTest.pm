@@ -25,10 +25,10 @@ sub execute {
 	$m->inc('{hostname="localhost"}');
 	$m->set(1000);
 	my $actual = $m->getExposure('/text/plain');
-	if (   ($actual !~ /test_metric\{environment="dev"\} 1 \d+/)
-		|| ($actual !~ /test_metric\{environment="test"\} 1 \d+/)
-		|| ($actual !~ /test_metric\{hostname="localhost"\} 1 \d+/)
-		|| ($actual !~ /test_metric 1000 \d+/)) {
+	if (   ($actual !~ /test_metric\{environment="dev"\} 1/)
+		|| ($actual !~ /test_metric\{environment="test"\} 1/)
+		|| ($actual !~ /test_metric\{hostname="localhost"\} 1/)
+		|| ($actual !~ /test_metric 1000/)) {
 		return "#getExposure('text/plain') failed:\n".
 			"Expected:\n".
 			"test_metric{environment=\"dev\"} 1 <timestamp>\n".
